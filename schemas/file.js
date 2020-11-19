@@ -9,7 +9,6 @@ const fileSchema = new Schema({
   },
   content: {
     type: String,
-    required: true,
   },
   count: {
     type: Number,

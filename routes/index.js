@@ -21,6 +21,7 @@ router.get('/', (req, res) => {
 
 router.post('/save', async (req, res) => {
   const { key, content } = req.body
+  log('key: ', key, 'content: ', content)
   try {
     const file = await FileModel.findOne({
       key,
