@@ -21,12 +21,10 @@ router.get('/', (req, res) => {
 //  find the document by key, found -> update it else add a new document
 router.post('/save', async (req, res) => {
   const { key, content } = req.body
-  log('key: ', key, 'content: ', content)
   try {
     const file = await FileModel.findOne({
       key,
     }).exec()
-    // log('File: ', file)
 
     let count
     if (file) {
@@ -41,8 +39,8 @@ router.post('/save', async (req, res) => {
           count,
         }
       )
-      log('document modified: ', queryResult.n)
-      const executionTime = queryResult.opTime.ts.high_ * 1000 - startTime
+      const executionTime = (Date.now()) - startTime
+      log(executionTime)
       res.status(200).json({
         count,
         executionTime,
@@ -56,7 +54,6 @@ router.post('/save', async (req, res) => {
       })
 
       const fileSaved = await fileModel.save()
-      console.log('fileSaved: ', fileSaved)
       res.status(200).json({
         count,
       })
