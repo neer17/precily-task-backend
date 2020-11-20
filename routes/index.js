@@ -8,7 +8,6 @@ const FileModel = require('../schemas/file')
 const log = console.log
 
 //  connecting to mLab
-console.info(`${process.env.MONGODB_URI}`)
 mongoose.connect(`${process.env.MONGODB_URI}`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -19,6 +18,7 @@ router.get('/', (req, res) => {
   res.send('Home Route')
 })
 
+//  find the document by key, found -> update it else add a new document
 router.post('/save', async (req, res) => {
   const { key, content } = req.body
   log('key: ', key, 'content: ', content)
@@ -65,6 +65,22 @@ router.post('/save', async (req, res) => {
     console.error(err)
     res.status(500).send(err)
   }
+})
+
+//  find the document by key, return to the client
+router.post('/data', async (req, res) => {
+  const { key } = req.body
+  const file = await FileModel.findOne({ key }).exec()
+  if (file)
+    res.json({
+      count: file.count,
+      content: file.content,
+    })
+  else
+    res.json({
+      count: 0,
+      content: null,
+    })
 })
 
 module.exports = router
